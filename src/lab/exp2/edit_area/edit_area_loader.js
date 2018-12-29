@@ -10,107 +10,107 @@ function EditAreaLoader(){
 	var t=this;
 	t.version= "0.8.2";
 	date= new Date();
-	t.start_time=date.getTime();
+	t.startTime=date.getTime();
 	t.win= "loading";	// window loading state
 	t.error= false;	// to know if load is interrrupt
 	t.baseURL="";
 	//t.suffix="";
 	t.template="";
 	t.lang= {};	// array of loaded speech language
-	t.load_syntax= {};	// array of loaded syntax language for highlight mode
+	t.loadSyntax= {};	// array of loaded syntax language for highlight mode
 	t.syntax= {};	// array of initilized syntax language for highlight mode
 	t.loadedFiles= [];
-	t.waiting_loading= {}; 	// files that must be loaded in order to allow the script to really start
+	t.waitingLoading= {}; 	// files that must be loaded in order to allow the script to really start
 	// scripts that must be loaded in the iframe
-	t.scripts_to_load= ["elements_functions", "resize_area", "reg_syntax"];
-	t.sub_scripts_to_load= ["edit_area", "manage_area" ,"edit_area_functions", "keyboard", "search_replace", "highlight", "regexp"];
-	t.syntax_display_name= { /*syntax_display_name_AUTO-FILL-BY-COMPRESSOR*/ };
+	t.scriptsToLoad= ["elementsFunctions", "resizeArea", "regSyntax"];
+	t.subScriptsToLoad= ["editArea", "manageArea" ,"editAreaFunctions", "keyboard", "searchReplace", "highlight", "regexp"];
+	t.syntaxDisplayName= { /*syntaxDisplayNameAUTO-FILL-BY-COMPRESSOR*/ };
 	
 	t.resize= []; // contain resizing datas
 	t.hidden= {};	// store datas of the hidden textareas
 	
-	t.default_settings= {
+	t.defaultSettings= {
 		//id: "src"	// id of the textarea to transform
 		debug: false
-		,smooth_selection: true
-		,font_size: "10"		// not for IE
-		,font_family: "monospace"	// can be "verdana,monospace". Allow non monospace font but Firefox get smaller tabulation with non monospace fonts. IE doesn't change the tabulation width and Opera doesn't take this option into account... 
-		,start_highlight: false	// if start with highlight
-		,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, change_smooth_selection, highlight, reset_highlight, word_wrap, |, help"
-		,begin_toolbar: ""		//  "new_document, save, load, |"
-		,end_toolbar: ""		// or end_toolbar
-		,is_multi_files: false		// enable the multi file mode (the textarea content is ignored)
-		,allow_resize: "both"	// possible values: "no", "both", "x", "y"
-		,show_line_colors: false	// if the highlight is disabled for the line currently beeing edited (if enabled => heavy CPU use)
-		,min_width: 400
-		,min_height: 125
-		,replace_tab_by_spaces: false
-		,allow_toggle: true		// true or false
+		,smoothSelection: true
+		,fontSize: "10"		// not for IE
+		,fontFamily: "monospace"	// can be "verdana,monospace". Allow non monospace font but Firefox get smaller tabulation with non monospace fonts. IE doesn't change the tabulation width and Opera doesn't take this option into account... 
+		,startHighlight: false	// if start with highlight
+		,toolbar: "search, goToLine, fullscreen, |, undo, redo, |, selectFont,|, changeSmoothSelection, highlight, resetHighlight, wordWrap, |, help"
+		,beginToolbar: ""		//  "newDocument, save, load, |"
+		,endToolbar: ""		// or endToolbar
+		,isMultiFiles: false		// enable the multi file mode (the textarea content is ignored)
+		,allowResize: "both"	// possible values: "no", "both", "x", "y"
+		,showLineColors: false	// if the highlight is disabled for the line currently beeing edited (if enabled => heavy CPU use)
+		,minWidth: 400
+		,minHeight: 125
+		,replaceTabBySpaces: false
+		,allowToggle: true		// true or false
 		,language: "en"
 		,syntax: ""
-		,syntax_selection_allow: "basic,brainfuck,c,coldfusion,cpp,css,html,java,js,pas,perl,php,python,ruby,robotstxt,sql,tsql,vb,xml"
+		,syntaxSelectionAllow: "basic,brainfuck,c,coldfusion,cpp,css,html,java,js,pas,perl,php,python,ruby,robotstxt,sql,tsql,vb,xml"
 		,display: "onload" 		// onload or later
-		,max_undo: 30
+		,maxUndo: 30
 		,browsers: "known"	// all or known
 		,plugins: "" // comma separated plugin list
-		,gecko_spellcheck: false	// enable/disable by default the gecko_spellcheck
+		,geckoSpellcheck: false	// enable/disable by default the geckoSpellcheck
 		,fullscreen: false
-		,is_editable: true
-		,cursor_position: "begin"
-		,word_wrap: false		// define if the text is wrapped of not in the textarea
+		,isEditable: true
+		,cursorPosition: "begin"
+		,wordWrap: false		// define if the text is wrapped of not in the textarea
 		,autocompletion: false	// NOT IMPLEMENTED			
-		,load_callback: ""		// click on load button (function name)
-		,save_callback: ""		// click on save button (function name)
-		,change_callback: ""	// textarea onchange trigger (function name)
-		,submit_callback: ""	// form submited (function name)
-		,EA_init_callback: ""	// EditArea initiliazed (function name)
-		,EA_delete_callback: ""	// EditArea deleted (function name)
-		,EA_load_callback: ""	// EditArea fully loaded and displayed (function name)
-		,EA_unload_callback: ""	// EditArea delete while being displayed (function name)
-		,EA_toggle_on_callback: ""	// EditArea toggled on (function name)
-		,EA_toggle_off_callback: ""	// EditArea toggled off (function name)
-		,EA_file_switch_on_callback: ""	// a new tab is selected (called for the newly selected file)
-		,EA_file_switch_off_callback: ""	// a new tab is selected (called for the previously selected file)
-		,EA_file_close_callback: ""		// close a tab
+		,loadCallback: ""		// click on load button (function name)
+		,saveCallback: ""		// click on save button (function name)
+		,changeCallback: ""	// textarea onchange trigger (function name)
+		,submitCallback: ""	// form submited (function name)
+		,EA_initCallback: ""	// EditArea initiliazed (function name)
+		,EA_deleteCallback: ""	// EditArea deleted (function name)
+		,EA_loadCallback: ""	// EditArea fully loaded and displayed (function name)
+		,EA_unloadCallback: ""	// EditArea delete while being displayed (function name)
+		,EA_toggleOnCallback: ""	// EditArea toggled on (function name)
+		,EA_toggleOffCallback: ""	// EditArea toggled off (function name)
+		,EA_fileSwitchOnCallback: ""	// a new tab is selected (called for the newly selected file)
+		,EA_fileSwitchOffCallback: ""	// a new tab is selected (called for the previously selected file)
+		,EA_fileCloseCallback: ""		// close a tab
 	};
 	
-	t.advanced_buttons = [
-			// id, button img, command (it will try to find the translation of "id"), is_file_specific
-			['new_document', 'newdocument.gif', 'new_document', false],
-			['search', 'search.gif', 'show_search', false],
-			['go_to_line', 'go_to_line.gif', 'go_to_line', false],
+	t.advancedButtons = [
+			// id, button img, command (it will try to find the translation of "id"), isFileSpecific
+			['newDocument', 'newdocument.gif', 'newDocument', false],
+			['search', 'search.gif', 'showSearch', false],
+			['goToLine', 'goToLine.gif', 'goToLine', false],
 			['undo', 'undo.gif', 'undo', true],
 			['redo', 'redo.gif', 'redo', true],
-			['change_smooth_selection', 'smooth_selection.gif', 'change_smooth_selection_mode', true],
-			['reset_highlight', 'reset_highlight.gif', 'resync_highlight', true],
-			['highlight', 'highlight.gif','change_highlight', true],
-			['help', 'help.gif', 'show_help', false],
+			['changeSmoothSelection', 'smoothSelection.gif', 'changeSmoothSelectionMode', true],
+			['resetHighlight', 'resetHighlight.gif', 'resyncHighlight', true],
+			['highlight', 'highlight.gif','changeHighlight', true],
+			['help', 'help.gif', 'showHelp', false],
 			['save', 'save.gif', 'save', false],
 			['load', 'load.gif', 'load', false],
-			['fullscreen', 'fullscreen.gif', 'toggle_full_screen', false],
-			['word_wrap', 'word_wrap.gif', 'toggle_word_wrap', true],
-			['autocompletion', 'autocompletion.gif', 'toggle_autocompletion', true]
+			['fullscreen', 'fullscreen.gif', 'toggleFullScreen', false],
+			['wordWrap', 'wordWrap.gif', 'toggleWordWrap', true],
+			['autocompletion', 'autocompletion.gif', 'toggleAutocompletion', true]
 		];
 			
 	// navigator identification
-	t.set_browser_infos(t);
+	t.setBrowserInfos(t);
 
 	if(t.isIE>=6 || t.isGecko || ( t.isWebKit && !t.isSafari<3 ) || t.isOpera>=9  || t.isCamino )
 		t.isValidBrowser=true;
 	else
 		t.isValidBrowser=false;
 
-	t.set_base_url();		
+	t.setBaseUrl();		
 	
-	for(var i=0; i<t.scripts_to_load.length; i++){
-		setTimeout("editAreaLoader.load_script('"+t.baseURL + t.scripts_to_load[i]+ ".js');", 1);	// let the time to Object editAreaLoader to be created before loading additionnal scripts
-		t.waiting_loading[t.scripts_to_load[i]+ ".js"]= false;
+	for(var i=0; i<t.scriptsToLoad.length; i++){
+		setTimeout("editAreaLoader.loadScript('"+t.baseURL + t.scriptsToLoad[i]+ ".js');", 1);	// let the time to Object editAreaLoader to be created before loading additionnal scripts
+		t.waitingLoading[t.scriptsToLoad[i]+ ".js"]= false;
 	}
-	t.add_event(window, "load", EditAreaLoader.prototype.window_loaded);
+	t.addEvent(window, "load", EditAreaLoader.prototype.windowLoaded);
 };
 	
 EditAreaLoader.prototype ={
-	has_error : function(){
+	hasError : function(){
 		this.error= true;
 		// set to empty all EditAreaLoader functions
 		for(var i in EditAreaLoader.prototype){
@@ -119,7 +119,7 @@ EditAreaLoader.prototype ={
 	},
 	
 	// add browser informations to the object passed in parameter
-	set_browser_infos : function(o){
+	setBrowserInfos : function(o){
 		ua= navigator.userAgent;
 		
 		// general detection
@@ -131,13 +131,13 @@ EditAreaLoader.prototype ={
 		if(o.isIE){
 			o.isIE = ua.replace(/^.*?MSIE\s+([0-9\.]+).*$/, "$1");
 			if(o.isIE<6)
-				o.has_error();
+				o.hasError();
 		}
 
 		if(o.isOpera = (ua.indexOf('Opera') != -1)){	
 			o.isOpera= ua.replace(/^.*?Opera.*?([0-9\.]+).*$/i, "$1");
 			if(o.isOpera<9)
-				o.has_error();
+				o.hasError();
 			o.isIE=false;			
 		}
 
@@ -166,38 +166,38 @@ EditAreaLoader.prototype ={
 		
 	},
 	
-	window_loaded : function(){
+	windowLoaded : function(){
 		editAreaLoader.win="loaded";
 		
 		// add events on forms
 		if (document.forms) {
 			for (var i=0; i<document.forms.length; i++) {
 				var form = document.forms[i];
-				form.edit_area_replaced_submit=null;
+				form.editAreaReplacedSubmit=null;
 				try {
 					
-					form.edit_area_replaced_submit = form.onsubmit;
+					form.editAreaReplacedSubmit = form.onsubmit;
 					form.onsubmit="";
 				} catch (e) {// Do nothing
 				}
-				editAreaLoader.add_event(form, "submit", EditAreaLoader.prototype.submit);
-				editAreaLoader.add_event(form, "reset", EditAreaLoader.prototype.reset);
+				editAreaLoader.addEvent(form, "submit", EditAreaLoader.prototype.submit);
+				editAreaLoader.addEvent(form, "reset", EditAreaLoader.prototype.reset);
 			}
 		}
-		editAreaLoader.add_event(window, "unload", function(){for(var i in editAreas){editAreaLoader.delete_instance(i);}});	// ini callback
+		editAreaLoader.addEvent(window, "unload", function(){for(var i in editAreas){editAreaLoader.deleteInstance(i);}});	// ini callback
 	},
 	
 	// init the checkup of the selection of the IE textarea
-	init_ie_textarea : function(id){
+	initIeTextarea : function(id){
 		var a=document.getElementById(id);
 		try{
 			if(a && typeof(a.focused)=="undefined"){
 				a.focus();
 				a.focused=true;
 				a.selectionStart= a.selectionEnd= 0;			
-				get_IE_selection(a);
-				editAreaLoader.add_event(a, "focus", IE_textarea_focus);
-				editAreaLoader.add_event(a, "blur", IE_textarea_blur);
+				getIESelection(a);
+				editAreaLoader.addEvent(a, "focus", IE_textareaFocus);
+				editAreaLoader.addEvent(a, "blur", IE_textareaBlur);
 				
 			}
 		}catch(ex){}
@@ -207,28 +207,28 @@ EditAreaLoader.prototype ={
 		var t=this,s=settings,i;
 		
 		if(!s["id"])
-			t.has_error();
+			t.hasError();
 		if(t.error)
 			return;
 		// if an instance of the editor already exists for this textarea => delete the previous one
 		if(editAreas[s["id"]])
-			t.delete_instance(s["id"]);
+			t.deleteInstance(s["id"]);
 	
 		// init settings
-		for(i in t.default_settings){
+		for(i in t.defaultSettings){
 			if(typeof(s[i])=="undefined")
-				s[i]=t.default_settings[i];
+				s[i]=t.defaultSettings[i];
 		}
 		
 		if(s["browsers"]=="known" && t.isValidBrowser==false){
 			return;
 		}
 		
-		if(s["begin_toolbar"].length>0)
-			s["toolbar"]= s["begin_toolbar"] +","+ s["toolbar"];
-		if(s["end_toolbar"].length>0)
-			s["toolbar"]= s["toolbar"] +","+ s["end_toolbar"];
-		s["tab_toolbar"]= s["toolbar"].replace(/ /g,"").split(",");
+		if(s["beginToolbar"].length>0)
+			s["toolbar"]= s["beginToolbar"] +","+ s["toolbar"];
+		if(s["endToolbar"].length>0)
+			s["toolbar"]= s["toolbar"] +","+ s["endToolbar"];
+		s["tabToolbar"]= s["toolbar"].replace(/ /g,"").split(",");
 		
 		s["plugins"]= s["plugins"].replace(/ /g,"").split(",");
 		for(i=0; i<s["plugins"].length; i++){
@@ -236,12 +236,12 @@ EditAreaLoader.prototype ={
 				s["plugins"].splice(i,1);
 		}
 	//	alert(settings["plugins"].length+": "+ settings["plugins"].join(","));
-		t.get_template();
-		t.load_script(t.baseURL + "langs/"+ s["language"] + ".js");
+		t.getTemplate();
+		t.loadScript(t.baseURL + "langs/"+ s["language"] + ".js");
 		
 		if(s["syntax"].length>0){
 			s["syntax"]=s["syntax"].toLowerCase();
-			t.load_script(t.baseURL + "reg_syntax/"+ s["syntax"] + ".js");
+			t.loadScript(t.baseURL + "regSyntax/"+ s["syntax"] + ".js");
 		}
 		//alert(this.template);
 		
@@ -254,7 +254,7 @@ EditAreaLoader.prototype ={
 	},
 	
 	// delete an instance of an EditArea
-	delete_instance : function(id){
+	deleteInstance : function(id){
 		var d=document,fs=window.frames,span,iframe;
 		editAreaLoader.execCommand(id, "EA_delete");
 		if(fs["frame_"+id] && fs["frame_"+id].editArea)
@@ -285,7 +285,7 @@ EditAreaLoader.prototype ={
 
 	
 	start : function(id){
-		var t=this,d=document,f,span,father,next,html='',html_toolbar_content='',template,content,i;
+		var t=this,d=document,f,span,father,next,html='',htmlToolbarContent='',template,content,i;
 		
 		// check that the window is loaded
 		if(t.win!="loaded"){
@@ -294,36 +294,36 @@ EditAreaLoader.prototype ={
 		}
 		
 		// check that all needed scripts are loaded
-		for( i in t.waiting_loading){
-			if(t.waiting_loading[i]!="loaded" && typeof(t.waiting_loading[i])!="function"){
+		for( i in t.waitingLoading){
+			if(t.waitingLoading[i]!="loaded" && typeof(t.waitingLoading[i])!="function"){
 				setTimeout("editAreaLoader.start('"+id+"');", 50);
 				return;
 			}
 		}
 		
 		// wait until language and syntax files are loaded
-		if(!t.lang[editAreas[id]["settings"]["language"]] || (editAreas[id]["settings"]["syntax"].length>0 && !t.load_syntax[editAreas[id]["settings"]["syntax"]]) ){
+		if(!t.lang[editAreas[id]["settings"]["language"]] || (editAreas[id]["settings"]["syntax"].length>0 && !t.loadSyntax[editAreas[id]["settings"]["syntax"]]) ){
 			setTimeout("editAreaLoader.start('"+id+"');", 50);
 			return;
 		}
 		// init the regexp for syntax highlight
 		if(editAreas[id]["settings"]["syntax"].length>0)
-			t.init_syntax_regexp();
+			t.initSyntaxRegexp();
 		
 			
 		// display toggle option and debug area
-		if(!d.getElementById("EditAreaArroundInfos_"+id) && (editAreas[id]["settings"]["debug"] || editAreas[id]["settings"]["allow_toggle"]))
+		if(!d.getElementById("EditAreaArroundInfos_"+id) && (editAreas[id]["settings"]["debug"] || editAreas[id]["settings"]["allowToggle"]))
 		{
 			span= d.createElement("span");
 			span.id= "EditAreaArroundInfos_"+id;
-			if(editAreas[id]["settings"]["allow_toggle"]){
+			if(editAreas[id]["settings"]["allowToggle"]){
 				checked=(editAreas[id]["settings"]["display"]=="onload")?"checked='checked'":"";
-				html+="<div id='edit_area_toggle_"+i+"'>";
-				html+="<input id='edit_area_toggle_checkbox_"+ id +"' class='toggle_"+ id +"' type='checkbox' onclick='editAreaLoader.toggle(\""+ id +"\");' accesskey='e' "+checked+" />";
-				html+="<label for='edit_area_toggle_checkbox_"+ id +"'>{$toggle}</label></div>";	
+				html+="<div id='editAreaToggle_"+i+"'>";
+				html+="<input id='editAreaToggleCheckbox_"+ id +"' class='toggle_"+ id +"' type='checkbox' onclick='editAreaLoader.toggle(\""+ id +"\");' accesskey='e' "+checked+" />";
+				html+="<label for='editAreaToggleCheckbox_"+ id +"'>{$toggle}</label></div>";	
 			}
 			if(editAreas[id]["settings"]["debug"])
-				html+="<textarea id='edit_area_debug_"+ id +"' spellcheck='off' style='z-index: 20; width: 100%; height: 120px;overflow: auto; border: solid black 1px;'></textarea><br />";				
+				html+="<textarea id='editAreaDebug_"+ id +"' spellcheck='off' style='z-index: 20; width: 100%; height: 120px;overflow: auto; border: solid black 1px;'></textarea><br />";				
 			html= t.translate(html, editAreas[id]["settings"]["language"]);				
 			span.innerHTML= html;				
 			father= d.getElementById(id).parentNode;
@@ -344,39 +344,39 @@ EditAreaLoader.prototype ={
 		}
 		
 		if(t.isIE){	// launch IE selection checkup
-			t.init_ie_textarea(id);
+			t.initIeTextarea(id);
 		}
 				
 		// get toolbar content
 		var area=editAreas[id];
 		
-		for(i=0; i<area["settings"]["tab_toolbar"].length; i++){
-		//	alert(this.tab_toolbar[i]+"\n"+ this.get_control_html(this.tab_toolbar[i]));
-			html_toolbar_content+= t.get_control_html(area["settings"]["tab_toolbar"][i], area["settings"]["language"]);
+		for(i=0; i<area["settings"]["tabToolbar"].length; i++){
+		//	alert(this.tabToolbar[i]+"\n"+ this.getControlHtml(this.tabToolbar[i]));
+			htmlToolbarContent+= t.getControlHtml(area["settings"]["tabToolbar"][i], area["settings"]["language"]);
 		}
 		// translate toolbar text here for chrome 2
-		html_toolbar_content = t.translate(html_toolbar_content, area["settings"]["language"], "template"); 
+		htmlToolbarContent = t.translate(htmlToolbarContent, area["settings"]["language"], "template"); 
 		
 		
 		// create javascript import rules for the iframe if the javascript has not been already loaded by the compressor
-		if(!t.iframe_script){
-			t.iframe_script="";
-			for(i=0; i<t.sub_scripts_to_load.length; i++)
-				t.iframe_script+='<script language="javascript" type="text/javascript" src="'+ t.baseURL + t.sub_scripts_to_load[i] +'.js"></script>';
+		if(!t.iframeScript){
+			t.iframeScript="";
+			for(i=0; i<t.subScriptsToLoad.length; i++)
+				t.iframeScript+='<script language="javascript" type="text/javascript" src="'+ t.baseURL + t.subScriptsToLoad[i] +'.js"></script>';
 		}
 		
 		// add plugins scripts if not already loaded by the compressor (but need to load language in all the case)
 		for(i=0; i<area["settings"]["plugins"].length; i++){
 			//if(typeof(area["settings"]["plugins"][i])=="function") continue;
-			if(!t.all_plugins_loaded)
+			if(!t.allPluginsLoaded)
 				t.iframe_script+='<script language="javascript" type="text/javascript" src="'+ t.baseURL + 'plugins/' + area["settings"]["plugins"][i] + '/' + area["settings"]["plugins"][i] +'.js"></script>';
-			t.iframe_script+='<script language="javascript" type="text/javascript" src="'+ t.baseURL + 'plugins/' + area["settings"]["plugins"][i] + '/langs/' + area["settings"]["language"] +'.js"></script>';
+			t.iframeScript+='<script language="javascript" type="text/javascript" src="'+ t.baseURL + 'plugins/' + area["settings"]["plugins"][i] + '/langs/' + area["settings"]["language"] +'.js"></script>';
 		}
 	
 		
 		// create css link for the iframe if the whole css text has not been already loaded by the compressor
-		if(!t.iframe_css){
-			t.iframe_css="<link href='"+ t.baseURL +"edit_area.css' rel='stylesheet' type='text/css' />";
+		if(!t.iframeCss){
+			t.iframeCss="<link href='"+ t.baseURL +"editArea.css' rel='stylesheet' type='text/css' />";
 		}
 		
 		
@@ -388,14 +388,14 @@ EditAreaLoader.prototype ={
 		// fill template with good language sentences
 		template= t.translate(template, area["settings"]["language"], "template");
 		
-		// add css_code
-		template= template.replace("[__CSSRULES__]", t.iframe_css);				
-		// add js_code
-		template= template.replace("[__JSCODE__]", t.iframe_script);
+		// add cssCode
+		template= template.replace("[__CSSRULES__]", t.iframeCss);				
+		// add jsCode
+		template= template.replace("[__JSCODE__]", t.iframeScript);
 		
-		// add version_code
+		// add versionCode
 		template= template.replace("[__EA_VERSION__]", t.version);
-		//template=template.replace(/\{\$([^\}]+)\}/gm, this.traduc_template);
+		//template=template.replace(/\{\$([^\}]+)\}/gm, this.traducTemplate);
 		
 		//editAreas[area["settings"]["id"]]["template"]= template;
 		
@@ -409,7 +409,7 @@ EditAreaLoader.prototype ={
 		// insert template in the document after the textarea
 		father= area.textarea.parentNode;
 	/*	var container= document.createElement("div");
-		container.id= "EditArea_frame_container_"+area["settings"]["id"];
+		container.id= "EditAreaFrameContainer_"+area["settings"]["id"];
 	*/	
 		content= d.createElement("iframe");
 		content.name= "frame_"+area["settings"]["id"];
@@ -428,8 +428,8 @@ EditAreaLoader.prototype ={
 		f=window.frames["frame_"+area["settings"]["id"]];
 		f.document.open();
 		f.editAreas=editAreas;
-		f.area_id= area["settings"]["id"];	
-		f.document.area_id= area["settings"]["id"];	
+		f.areaId= area["settings"]["id"];	
+		f.document.areaId= area["settings"]["id"];	
 		f.document.write(template);
 		f.document.close();
 
@@ -438,33 +438,33 @@ EditAreaLoader.prototype ={
 		
 	},
 	
-	toggle : function(id, toggle_to){
+	toggle : function(id, toggleTo){
 
-	/*	if((editAreas[id]["displayed"]==true  && toggle_to!="on") || toggle_to=="off"){
-			this.toggle_off(id);
-		}else if((editAreas[id]["displayed"]==false  && toggle_to!="off") || toggle_to=="on"){
-			this.toggle_on(id);
+	/*	if((editAreas[id]["displayed"]==true  && toggleTo!="on") || toggleTo=="off"){
+			this.toggleOff(id);
+		}else if((editAreas[id]["displayed"]==false  && toggleTo!="off") || toggleTo=="on"){
+			this.toggleOn(id);
 		}*/
-		if(!toggle_to)
-			toggle_to= (editAreas[id]["displayed"]==true)?"off":"on";
-		if(editAreas[id]["displayed"]==true  && toggle_to=="off"){
-			this.toggle_off(id);
-		}else if(editAreas[id]["displayed"]==false  && toggle_to=="on"){
-			this.toggle_on(id);
+		if(!toggleTo)
+			toggleTo= (editAreas[id]["displayed"]==true)?"off":"on";
+		if(editAreas[id]["displayed"]==true  && toggleTo=="off"){
+			this.toggleOff(id);
+		}else if(editAreas[id]["displayed"]==false  && toggleTo=="on"){
+			this.toggleOn(id);
 		}
 	
 		return false;
 	},
 	
 	// static function
-	toggle_off : function(id){
+	toggleOff : function(id){
 		var fs=window.frames,f,t,parNod,nxtSib,selStart,selEnd,scrollTop,scrollLeft;
 		if(fs["frame_"+id])
 		{	
 			f	= fs["frame_"+id];
 			t	= editAreas[id]["textarea"];
 			if(f.editArea.fullscreen['isFull'])
-				f.editArea.toggle_full_screen(false);
+				f.editArea.toggleFullScreen(false);
 			editAreas[id]["displayed"]=false;
 			
 			// set wrap to off to keep same display mode (some browser get problem with this, so it need more complex operation		
@@ -477,8 +477,8 @@ EditAreaLoader.prototype ={
 			
 			// restore values
 			t.value= f.editArea.textarea.value;
-			selStart	= f.editArea.last_selection["selectionStart"];
-			selEnd		= f.editArea.last_selection["selectionEnd"];
+			selStart	= f.editArea.lastSelection["selectionStart"];
+			selEnd		= f.editArea.lastSelection["selectionEnd"];
 			scrollTop	= f.document.getElementById("result").scrollTop;
 			scrollLeft	= f.document.getElementById("result").scrollLeft;
 			
@@ -494,7 +494,7 @@ EditAreaLoader.prototype ={
 				t.selectionStart= selStart;
 				t.selectionEnd	= selEnd;
 				t.focused		= true;
-				set_IE_selection(t);
+				setIE_selection(t);
 			}else{
 				if(this.isOpera && this.isOpera < 9.6 ){	// Opera bug when moving selection start and selection end
 					t.setSelectionRange(0, 0);
@@ -505,13 +505,13 @@ EditAreaLoader.prototype ={
 			}
 			t.scrollTop= scrollTop;
 			t.scrollLeft= scrollLeft;
-			f.editArea.execCommand("toggle_off");
+			f.editArea.execCommand("toggleOff");
 
 		}
 	},	
 	
 	// static function
-	toggle_on : function(id){
+	toggleOn : function(id){
 		var fs=window.frames,f,t,selStart=0,selEnd=0,scrollTop=0,scrollLeft=0,curPos,elem;
 			
 		if(fs["frame_"+id])
@@ -522,15 +522,15 @@ EditAreaLoader.prototype ={
 			area.textarea.value= t.value;
 			
 			// store display values;
-			curPos	= editAreas[id]["settings"]["cursor_position"];
+			curPos	= editAreas[id]["settings"]["cursorPosition"];
 
-			if(t.use_last==true)
+			if(t.useLast==true)
 			{
-				selStart	= t.last_selectionStart;
-				selEnd		= t.last_selectionEnd;
-				scrollTop	= t.last_scrollTop;
-				scrollLeft	= t.last_scrollLeft;
-				t.use_last=false;
+				selStart	= t.lastSelectionStart;
+				selEnd		= t.lastSelectionEnd;
+				scrollTop	= t.lastScrollTop;
+				scrollLeft	= t.lastScrollLeft;
+				t.useLast=false;
 			}
 			else if( curPos == "auto" )
 			{
@@ -544,7 +544,7 @@ EditAreaLoader.prototype ={
 			}
 			
 			// set to good size
-			this.set_editarea_size_from_textarea(id, document.getElementById("frame_"+id));
+			this.setEditareaSizeFromTextarea(id, document.getElementById("frame_"+id));
 			t.style.display="none";			
 			document.getElementById("frame_"+id).style.display="inline";
 			area.execCommand("focus"); // without this focus opera doesn't manage well the iframe body height
@@ -552,35 +552,35 @@ EditAreaLoader.prototype ={
 			
 			// restore display values
 			editAreas[id]["displayed"]=true;
-			area.execCommand("update_size");
+			area.execCommand("updateSize");
 			
 			f.document.getElementById("result").scrollTop= scrollTop;
 			f.document.getElementById("result").scrollLeft= scrollLeft;
-			area.area_select(selStart, selEnd-selStart);
-			area.execCommand("toggle_on");
+			area.areaSelect(selStart, selEnd-selStart);
+			area.execCommand("toggleOn");
 
 			
 		}
 		else
 		{
 		/*	if(this.isIE)
-				get_IE_selection(document.getElementById(id));	*/	
+				getIE_selection(document.getElementById(id));	*/	
 			elem= document.getElementById(id);	
-			elem.last_selectionStart= elem.selectionStart;
-			elem.last_selectionEnd= elem.selectionEnd;
-			elem.last_scrollTop= elem.scrollTop;
-			elem.last_scrollLeft= elem.scrollLeft;
-			elem.use_last=true;
+			elem.lastSelectionStart= elem.selectionStart;
+			elem.lastSelectionEnd= elem.selectionEnd;
+			elem.lastScrollTop= elem.scrollTop;
+			elem.lastScrollLeft= elem.scrollLeft;
+			elem.useLast=true;
 			editAreaLoader.start(id);
 		}
 	},	
 	
-	set_editarea_size_from_textarea : function(id, frame){	
+	setEditareaSizeFromTextarea : function(id, frame){	
 		var elem,width,height;
 		elem	= document.getElementById(id);
 		
-		width	= Math.max(editAreas[id]["settings"]["min_width"], elem.offsetWidth)+"px";
-		height	= Math.max(editAreas[id]["settings"]["min_height"], elem.offsetHeight)+"px";
+		width	= Math.max(editAreas[id]["settings"]["minWidth"], elem.offsetWidth)+"px";
+		height	= Math.max(editAreas[id]["settings"]["minHeight"], elem.offsetHeight)+"px";
 		if(elem.style.width.indexOf("%")!=-1)
 			width	= elem.style.width;
 		if(elem.style.height.indexOf("%")!=-1)
@@ -591,18 +591,18 @@ EditAreaLoader.prototype ={
 		frame.style.height= height;
 	},
 		
-	set_base_url : function(){
+	setBaseUrl : function(){
 		var t=this,elems,i,docBasePath;
 
 		if( !this.baseURL ){
 			elems = document.getElementsByTagName('script');
 	
 			for( i=0; i<elems.length; i++ ){
-				if (elems[i].src && elems[i].src.match(/edit_area_[^\\\/]*$/i) ) {
+				if (elems[i].src && elems[i].src.match(/editArea_[^\\\/]*$/i) ) {
 					var src = unescape( elems[i].src ); // use unescape for utf-8 encoded urls
 					src = src.substring(0, src.lastIndexOf('/'));
 					this.baseURL = src;
-					this.file_name= elems[i].src.substr(elems[i].src.lastIndexOf("/")+1);
+					this.fileName= elems[i].src.substr(elems[i].src.lastIndexOf("/")+1);
 					break;
 				}
 			}
@@ -621,7 +621,7 @@ EditAreaLoader.prototype ={
 		t.baseURL	+="/";	
 	},
 	
-	get_button_html : function(id, img, exec, isFileSpecific, baseURL) {
+	getButtonHtml : function(id, img, exec, isFileSpecific, baseURL) {
 		var cmd,html;
 		if(!baseURL)
 			baseURL= this.baseURL;
@@ -631,82 +631,82 @@ EditAreaLoader.prototype ={
 		return html;
 	},
 
-	get_control_html : function(button_name, lang) {		
+	getControlHtml : function(buttonName, lang) {		
 		var t=this,i,but,html,si;
-		for (i=0; i<t.advanced_buttons.length; i++)
+		for (i=0; i<t.advancedButtons.length; i++)
 		{
-			but = t.advanced_buttons[i];			
-			if (but[0] == button_name)
+			but = t.advancedButtons[i];			
+			if (but[0] == buttonName)
 			{
-				return t.get_button_html(but[0], but[1], but[2], but[3]);
+				return t.getButtonHtml(but[0], but[1], but[2], but[3]);
 			}	
 		}		
 				
-		switch (button_name){
+		switch (buttonName){
 			case "*":
 			case "return":
 				return "<br />";
 			case "|":
 		  	case "separator":
 				return '<img src="'+ t.baseURL +'images/spacer.gif" width="1" height="15" class="editAreaSeparatorLine">';
-			case "select_font":
-				html= "<select id='area_font_size' onchange='javascript:editArea.execCommand(\"change_font_size\")' fileSpecific='yes'>";
-				html+="<option value='-1'>{$font_size}</option>";
+			case "selectFont":
+				html= "<select id='areaFontSize' onchange='javascript:editArea.execCommand(\"changeFontSize\")' fileSpecific='yes'>";
+				html+="<option value='-1'>{$fontSize}</option>";
 				si=[8,9,10,11,12,14];
 				for( i=0;i<si.length;i++){
 					html+="<option value='"+si[i]+"'>"+si[i]+" pt</option>";
 				}
 				html+="</select>";
 				return html;
-			case "syntax_selection":
-				html= "<select id='syntax_selection' onchange='javascript:editArea.execCommand(\"change_syntax\", this.value)' fileSpecific='yes'>";
-				html+="<option value='-1'>{$syntax_selection}</option>";
+			case "syntaxSelection":
+				html= "<select id='syntaxSelection' onchange='javascript:editArea.execCommand(\"changeSyntax\", this.value)' fileSpecific='yes'>";
+				html+="<option value='-1'>{$syntaxSelection}</option>";
 				html+="</select>";
 				return html;
 		}
 		
-		return "<span id='tmp_tool_"+button_name+"'>["+button_name+"]</span>";		
+		return "<span id='tmpTool_"+buttonName+"'>["+buttonName+"]</span>";		
 	},
 	
 	
-	get_template : function(){
+	getTemplate : function(){
 		if(this.template=="")
 		{
-			var xhr_object = null; 
+			var xhrObject = null; 
 			if(window.XMLHttpRequest) // Firefox 
-				xhr_object = new XMLHttpRequest(); 
+				xhrObject = new XMLHttpRequest(); 
 			else if(window.ActiveXObject) // Internet Explorer 
-				xhr_object = new ActiveXObject("Microsoft.XMLHTTP"); 
+				xhrObject = new ActiveXObject("Microsoft.XMLHTTP"); 
 			else { // XMLHttpRequest not supported
 				alert("XMLHTTPRequest not supported. EditArea not loaded"); 
 				return; 
 			} 
 			 
-			xhr_object.open("GET", this.baseURL+"template.html", false); 
-			xhr_object.send(null); 
-			if(xhr_object.readyState == 4) 
-				this.template=xhr_object.responseText;
+			xhrObject.open("GET", this.baseURL+"template.html", false); 
+			xhrObject.send(null); 
+			if(xhrObject.readyState == 4) 
+				this.template=xhrObject.responseText;
 			else
-				this.has_error();
+				this.hasError();
 		}
 	},
 	
 	// translate text
 	translate : function(text, lang, mode){
 		if(mode=="word")
-			text=editAreaLoader.get_word_translation(text, lang);
+			text=editAreaLoader.getWordTranslation(text, lang);
 		else if(mode="template"){
-			editAreaLoader.current_language= lang;
-			text=text.replace(/\{\$([^\}]+)\}/gm, editAreaLoader.translate_template);
+			editAreaLoader.currentLanguage= lang;
+			text=text.replace(/\{\$([^\}]+)\}/gm, editAreaLoader.translateTemplate);
 		}
 		return text;
 	},
 	
-	translate_template : function(){
-		return editAreaLoader.get_word_translation(EditAreaLoader.prototype.translate_template.arguments[1], editAreaLoader.current_language);
+	translateTemplate : function(){
+		return editAreaLoader.getWordTranslation(EditAreaLoader.prototype.translateTemplate.arguments[1], editAreaLoader.currentLanguage);
 	},
 	
-	get_word_translation : function(val, lang){
+	getWordTranslation : function(val, lang){
 		var i;
 		
 		for( i in editAreaLoader.lang[lang]){
@@ -716,7 +716,7 @@ EditAreaLoader.prototype ={
 		return "_"+val;
 	},
 	
-	load_script : function(url){
+	loadScript : function(url){
 		var t=this,d=document,script,head;
 		
 		if( t.loadedFiles[url] )
@@ -735,7 +735,7 @@ EditAreaLoader.prototype ={
 		t.loadedFiles[url] = true;
 	},
 	
-	add_event : function(obj, name, handler) {
+	addEvent : function(obj, name, handler) {
 		try{
 			if (obj.attachEvent) {
 				obj.attachEvent("on" + name, handler);
@@ -745,7 +745,7 @@ EditAreaLoader.prototype ={
 		}catch(e){}
 	},
 	
-	remove_event : function(obj, name, handler){
+	removeEvent : function(obj, name, handler){
 		try{
 			if (obj.detachEvent)
 				obj.detachEvent("on" + name, handler);
@@ -757,24 +757,24 @@ EditAreaLoader.prototype ={
 
 	// reset all the editareas in the form that have been reseted
 	reset : function(e){
-		var formObj,is_child,i,x;
+		var formObj,isChild,i,x;
 		
 		formObj = editAreaLoader.isIE ? window.event.srcElement : e.target;
 		if(formObj.tagName!='FORM')
 			formObj= formObj.form;
 		
 		for( i in editAreas ){			
-			is_child= false;
+			isChild= false;
 			for( x=0;x<formObj.elements.length;x++ ) {
 				if(formObj.elements[x].id == i)
-					is_child=true;
+					isChild=true;
 			}
 			
-			if(window.frames["frame_"+i] && is_child && editAreas[i]["displayed"]==true){
+			if(window.frames["frame_"+i] && isChild && editAreas[i]["displayed"]==true){
 			
 				var exec= 'window.frames["frame_'+ i +'"].editArea.textarea.value= document.getElementById("'+ i +'").value;';
 				exec+= 'window.frames["frame_'+ i +'"].editArea.execCommand("focus");';
-				exec+= 'window.frames["frame_'+ i +'"].editArea.check_line_selection();';
+				exec+= 'window.frames["frame_'+ i +'"].editArea.checkLineSelection();';
 				exec+= 'window.frames["frame_'+ i +'"].editArea.execCommand("reset");';
 				window.setTimeout(exec, 10);
 			}
@@ -785,27 +785,27 @@ EditAreaLoader.prototype ={
 	
 	// prepare all the textarea replaced by an editarea to be submited
 	submit : function(e){		
-		var formObj,is_child,fs=window.frames,i,x;
+		var formObj,isChild,fs=window.frames,i,x;
 		formObj = editAreaLoader.isIE ? window.event.srcElement : e.target;
 		if(formObj.tagName!='FORM')
 			formObj= formObj.form;
 		
 		for( i in editAreas){
-			is_child= false;
+			isChild= false;
 			for( x=0;x<formObj.elements.length;x++ ) {
 				if(formObj.elements[x].id == i)
-					is_child=true;
+					isChild=true;
 			}
 		
-			if(is_child)
+			if(isChild)
 			{
 				if(fs["frame_"+i] && editAreas[i]["displayed"]==true)
 					document.getElementById(i).value= fs["frame_"+ i].editArea.textarea.value;
 				editAreaLoader.execCommand(i,"EA_submit");
 			}
 		}				
-		if( typeof(formObj.edit_area_replaced_submit) == "function" ){
-			res= formObj.edit_area_replaced_submit();
+		if( typeof(formObj.editAreaReplacedSubmit) == "function" ){
+			res= formObj.editAreaReplacedSubmit();
 			if(res==false){
 				if(editAreaLoader.isIE)
 					return false;
@@ -827,16 +827,16 @@ EditAreaLoader.prototype ={
     },
     
     // allow to set the value of the editarea
-    setValue : function(id, new_val){
+    setValue : function(id, newVal){
     	var fs=window.frames;
     	
         if( ( f=fs["frame_"+id] ) && editAreas[id]["displayed"]==true){
-			f.editArea.textarea.value= new_val;     
+			f.editArea.textarea.value= newVal;     
 			f.editArea.execCommand("focus"); 
-			f.editArea.check_line_selection(false);  
+			f.editArea.checkLineSelection(false);  
 			f.editArea.execCommand("onchange");
         }else if(elem=document.getElementById(id)){
-        	elem.value= new_val;
+        	elem.value= newVal;
         }
     },
 	    
@@ -858,18 +858,18 @@ EditAreaLoader.prototype ={
     },
     
     // allow to set the selection with the given start and end positions
-    setSelectionRange : function(id, new_start, new_end){
+    setSelectionRange : function(id, newStart, newEnd){
     	var fs=window.frames;
     	
         if(fs["frame_"+id] && editAreas[id]["displayed"]==true){
-            fs["frame_"+ id].editArea.area_select(new_start, new_end-new_start);  
+            fs["frame_"+ id].editArea.areaSelect(newStart, newEnd-newStart);  
 			// make an auto-scroll to the selection
 			if(!this.isIE){
-				fs["frame_"+ id].editArea.check_line_selection(false); 
-				fs["frame_"+ id].editArea.scroll_to_view();
+				fs["frame_"+ id].editArea.checkLineSelection(false); 
+				fs["frame_"+ id].editArea.scrollToView();
 			}   
         }else if(elem=document.getElementById(id)){
-        	setSelectionRange(elem, new_start, new_end);
+        	setSelectionRange(elem, newStart, newEnd);
         }
     },
     
@@ -879,10 +879,10 @@ EditAreaLoader.prototype ={
         return this.getValue(id).substring(sel["start"], sel["end"]);
     },
 	
-	setSelectedText : function(id, new_val){
-		var fs=window.frames,d=document,sel,text,scrollTop,scrollLeft,new_sel_end;
+	setSelectedText : function(id, newVal){
+		var fs=window.frames,d=document,sel,text,scrollTop,scrollLeft,newSelEnd;
 		
-		new_val	= new_val.replace(/\r/g, ""); 
+		newVal	= newVal.replace(/\r/g, ""); 
 		sel		= this.getSelectionRange(id);
 		text	= this.getValue(id);
 		if(fs["frame_"+id] && editAreas[id]["displayed"]==true){
@@ -893,15 +893,15 @@ EditAreaLoader.prototype ={
 			scrollLeft	= d.getElementById(id).scrollLeft;
 		}
 		
-		text	= text.substring(0, sel["start"])+ new_val +text.substring(sel["end"]);
+		text	= text.substring(0, sel["start"])+ newVal +text.substring(sel["end"]);
 		this.setValue(id, text);
-		new_sel_end	= sel["start"]+ new_val.length;
-		this.setSelectionRange(id, sel["start"], new_sel_end);
+		newSelEnd	= sel["start"]+ newVal.length;
+		this.setSelectionRange(id, sel["start"], newSelEnd);
 		
 		
 		// fix \r problem for selection length count on IE & Opera
-		if(new_val != this.getSelectedText(id).replace(/\r/g, "")){
-			this.setSelectionRange(id, sel["start"], new_sel_end+ new_val.split("\n").length -1);
+		if(newVal != this.getSelectedText(id).replace(/\r/g, "")){
+			this.setSelectionRange(id, sel["start"], newSelEnd+ newVal.split("\n").length -1);
 		}
 		// restore scrolling position
 		if(fs["frame_"+id] && editAreas[id]["displayed"]==true){
@@ -914,19 +914,19 @@ EditAreaLoader.prototype ={
 		}
     },
     
-    insertTags : function(id, open_tag, close_tag){
-    	var old_sel,new_sel;
+    insertTags : function(id, openTag, closeTag){
+    	var oldSel,newSel;
     	
-    	old_sel	= this.getSelectionRange(id);
-    	text	= open_tag + this.getSelectedText(id) + close_tag;
+    	oldSel	= this.getSelectionRange(id);
+    	text	= openTag + this.getSelectedText(id) + closeTag;
     	 
 		editAreaLoader.setSelectedText(id, text);
 		
-    	new_sel	= this.getSelectionRange(id);
-    	if(old_sel["end"] > old_sel["start"])	// if text was selected, cursor at the end
-    		this.setSelectionRange(id, new_sel["end"], new_sel["end"]);
+    	newSel	= this.getSelectionRange(id);
+    	if(oldSel["end"] > oldSel["start"])	// if text was selected, cursor at the end
+    		this.setSelectionRange(id, newSel["end"], newSel["end"]);
     	else // cursor in the middle
-    		this.setSelectionRange(id, old_sel["start"]+open_tag.length, old_sel["start"]+open_tag.length);
+    		this.setSelectionRange(id, oldSel["start"]+openTag.length, oldSel["start"]+openTag.length);
     },
     
     // hide both EditArea and normal textarea
@@ -957,7 +957,7 @@ EditAreaLoader.prototype ={
 				t.hidden[id]["scrollLeft"]= scrollLeft;
 				
 				if(editAreas[id]["displayed"]==true)
-					editAreaLoader.toggle_off(id);
+					editAreaLoader.toggleOff(id);
 			}
 			
 			// hide toggle button and debug box
@@ -995,7 +995,7 @@ EditAreaLoader.prototype ={
 				
 				// restore EditArea
 				if(t.hidden[id]["toggle"]==true)
-					editAreaLoader.toggle_on(id);
+					editAreaLoader.toggleOn(id);
 				
 				scrollTop	= t.hidden[id]["scrollTop"];
 				scrollLeft	= t.hidden[id]["scrollLeft"];
@@ -1018,57 +1018,57 @@ EditAreaLoader.prototype ={
 	
 	// get the current file datas (for multi file editing mode)
 	getCurrentFile : function(id){
-		return this.execCommand(id, 'get_file', this.execCommand(id, 'curr_file'));
+		return this.execCommand(id, 'getFile', this.execCommand(id, 'currFile'));
 	},
 	
 	// get the given file datas (for multi file editing mode)
-	getFile : function(id, file_id){
-		return this.execCommand(id, 'get_file', file_id);
+	getFile : function(id, fileId){
+		return this.execCommand(id, 'getFile', fileId);
 	},
 	
 	// get all the openned files datas (for multi file editing mode)
 	getAllFiles : function(id){
-		return this.execCommand(id, 'get_all_files()');
+		return this.execCommand(id, 'getAllFiles()');
 	},
 	
 	// open a file (for multi file editing mode)
-	openFile : function(id, file_infos){
-		return this.execCommand(id, 'open_file', file_infos);
+	openFile : function(id, fileInfos){
+		return this.execCommand(id, 'openFile', fileInfos);
 	},
 	
 	// close the given file (for multi file editing mode)
-	closeFile : function(id, file_id){
-		return this.execCommand(id, 'close_file', file_id);
+	closeFile : function(id, fileId){
+		return this.execCommand(id, 'closeFile', fileId);
 	},
 	
 	// close the given file (for multi file editing mode)
-	setFileEditedMode : function(id, file_id, to){
+	setFileEditedMode : function(id, fileId, to){
 		var reg1,reg2;
 		reg1	= new RegExp('\\\\', 'g');
 		reg2	= new RegExp('"', 'g');
-		return this.execCommand(id, 'set_file_edited_mode("'+ file_id.replace(reg1, '\\\\').replace(reg2, '\\"') +'", '+ to +')');
+		return this.execCommand(id, 'setFileEditedMode("'+ file_id.replace(reg1, '\\\\').replace(reg2, '\\"') +'", '+ to +')');
 	},
 	
 	
 	// allow to access to editarea functions and datas (for advanced users only)
-	execCommand : function(id, cmd, fct_param){
+	execCommand : function(id, cmd, fctParam){
 		switch(cmd){
 			case "EA_init":
-				if(editAreas[id]['settings']["EA_init_callback"].length>0)
-					eval(editAreas[id]['settings']["EA_init_callback"]+"('"+ id +"');");
+				if(editAreas[id]['settings']["EA_initCallback"].length>0)
+					eval(editAreas[id]['settings']["EA_initCallback"]+"('"+ id +"');");
 				break;
 			case "EA_delete":
 				if(editAreas[id]['settings']["EA_delete_callback"].length>0)
-					eval(editAreas[id]['settings']["EA_delete_callback"]+"('"+ id +"');");
+					eval(editAreas[id]['settings']["EA_deleteCallback"]+"('"+ id +"');");
 				break;
 			case "EA_submit":
 				if(editAreas[id]['settings']["submit_callback"].length>0)
-					eval(editAreas[id]['settings']["submit_callback"]+"('"+ id +"');");
+					eval(editAreas[id]['settings']["submitCallback"]+"('"+ id +"');");
 				break;
 		}
         if(window.frames["frame_"+id] && window.frames["frame_"+ id].editArea){
-			if(fct_param!=undefined)
-				return eval('window.frames["frame_'+ id +'"].editArea.'+ cmd +'(fct_param);');
+			if(fctParam!=undefined)
+				return eval('window.frames["frame_'+ id +'"].editArea.'+ cmd +'(fctParam);');
 			else
 				return eval('window.frames["frame_'+ id +'"].editArea.'+ cmd +';');       
         }

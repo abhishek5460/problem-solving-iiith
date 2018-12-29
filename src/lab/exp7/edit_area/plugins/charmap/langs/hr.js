@@ -1,6 +1,6 @@
-editArea.add_lang("hr",{
-charmap_but: "Virtualna tipkovnica",
-charmap_title: "Virtualna tipkovnica",
-charmap_choose_block: "Odaberi blok s jezikom",
-charmap_insert:"Ubaci taj znak"
+editArea.addLang("hr",{
+charmapBut: "Virtualna tipkovnica",
+charmapTitle: "Virtualna tipkovnica",
+charmapChooseBlock: "Odaberi blok s jezikom",
+charmapInsert:"Ubaci taj znak"
 });

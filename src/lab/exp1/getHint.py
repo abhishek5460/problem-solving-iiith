@@ -6,7 +6,6 @@ PATH=''
 for x in sfpath[0:-1]:
         PATH=PATH+'/'+x
 PATH=PATH+'/'
-
 def index(req,qNo,hintNo,sid):
         if(qNo=="1"):
                 dir = PATH + "Hints1/"
@@ -14,9 +13,7 @@ def index(req,qNo,hintNo,sid):
                 dir = PATH + "Hints2/"
         try:
                 F = open(dir+"Hint_"+hintNo+".html","r");
-
-                s =  F.read()
-                
+                s =  F.read()  
                 F.close()
         except:
                 s = 'Failed to load' ;
